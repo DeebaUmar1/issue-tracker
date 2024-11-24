@@ -7,9 +7,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react'
 
 const FilterByUsers = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
     const { data: users, error, isLoading } = useUsers();
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  
 
     const filterByUsers = (userId : string) => {
         const params = new URLSearchParams();

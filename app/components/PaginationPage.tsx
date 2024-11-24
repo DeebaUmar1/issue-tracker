@@ -10,10 +10,13 @@ interface Props{
     currentPage : number
 }
 const PaginationPage = ({itemCount, pageSize, currentPage}: Props) => {
-    const pageCount = Math.ceil(itemCount / pageSize)
-    if (pageCount <= 1) return null;
     const router = useRouter();
     const searchParams = useSearchParams();
+    const pageCount = Math.ceil(itemCount / pageSize);
+
+    // Early return logic
+    if (pageCount <= 1) return null; // This is fine, it won't affect hooks
+  
     
     const changePage = (page : number) =>{
         const params = new URLSearchParams(searchParams);
