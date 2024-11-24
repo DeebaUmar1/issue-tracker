@@ -4,14 +4,17 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-interface Props{
-  params: {id : string}
-}
 export async function PATCH(
   request: NextRequest,
-  context: Props 
+  {
+    params,
+    searchParams,
+  }: {
+    params: Promise<{ params: string }>;
+    searchParams: Promise<{ [key: string]: string }>;
+  } 
 ) {
-  const { id } = context.params;
+  const resolvedSearchParams = await searchParams;
   const session = await getServerSession(AuthOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
@@ -36,7 +39,7 @@ export async function PATCH(
   }
 
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(resolvedSearchParams.id) },
   });
   if (!issue)
     return NextResponse.json(
@@ -58,14 +61,20 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  context: Props
+  {
+    params,
+    searchParams,
+  }: {
+    params: Promise<{ params: string }>;
+    searchParams: Promise<{ [key: string]: string }>;
+  } 
 ) {
-  const { id } = context.params;
+  const resolvedSearchParams = await searchParams;
   const session = await getServerSession(AuthOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(resolvedSearchParams.id) },
   });
 
   if (!issue)
