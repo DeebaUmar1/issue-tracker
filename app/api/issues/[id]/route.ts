@@ -4,9 +4,12 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
+interface Props{
+  params: {id : string}
+}
 export async function PATCH(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: Props 
 ) {
   const { id } = context.params;
   const session = await getServerSession(AuthOptions);
@@ -55,7 +58,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: Props
 ) {
   const { id } = context.params;
   const session = await getServerSession(AuthOptions);
