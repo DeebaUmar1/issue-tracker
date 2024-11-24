@@ -4,17 +4,19 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
+interface Props {
+  params: Promise<{ id: string }>;  // Adjusted to match the expected type
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
 export async function PATCH(
   request: NextRequest,
   {
     params,
     searchParams,
-  }: {
-    params: Promise<{ params: string }>;
-    searchParams: Promise<{ [key: string]: string }>;
-  } 
+  }: Props
 ) {
-  const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams = await params;
   const session = await getServerSession(AuthOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
