@@ -7,6 +7,7 @@ import { Issue, Status } from '@prisma/client';
 import NextLink from 'next/link';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import PaginationPage from '../components/PaginationPage';
+import { Metadata } from 'next';
 
 const columns: { label: string; value: keyof Issue; className?: string; sortable?: boolean }[] = [
   { label: 'Issue', value: 'title', sortable: true },
@@ -102,6 +103,12 @@ const IssuesPage = async ({
      
     </div>
   );
+};
+
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Issue List',
+  description: 'View all project issues'
 };
 
 export const revalidate = 0;
