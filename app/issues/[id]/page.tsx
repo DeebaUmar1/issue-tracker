@@ -8,60 +8,49 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/app/auth/AuthOptions'
 import AssigneeSelect from './AssigneeSelect'
 
-
-const IssueDetailPage = async ({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ params: string }>;
-  searchParams: Promise<{ [key: string]: string }>;
-} ) => {
-    const session = await getServerSession(AuthOptions)
-    const resolvedSearchParams = await searchParams;
-    console.log(resolvedSearchParams.id)
-    console.log(resolvedSearchParams)
-    const issue = await prisma.issue.findUnique(
-        {where :{id : parseInt(resolvedSearchParams.id)}}
-    )
-    if(!issue)
-        notFound();
-  return (
-    <Grid columns = {{ initial : "1", md : "5"}} gap= "5">
-      <Box className='md:col-span-4'>
-     <IssueDetails issue={issue}/>
-      </Box>
-      <Box>
-      {session &&<Flex direction="column" gap="4">
-       <AssigneeSelect issue = {issue}/>
-       <EditButton id ={issue.id}/>
-       <DeleteButton id = {issue.id}/>
-       </Flex> 
-       }
-        
-       
-      </Box>
-      
-       
-      
-    </Grid>
-  )
+interface Props {
+  params: { id: string };
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ params: string }>;
-  searchParams: Promise<{ [key: string]: string }>;
-} ) {
-  const resolvedSearchParams = await searchParams;
-  console.log(resolvedSearchParams.id)
-  console.log(resolvedSearchParams)
-  const issue = await prisma.issue.findUnique({ where: { id: parseInt(resolvedSearchParams.id) }});
+const fetchIssue = async (issueId: string) => {
+  return await prisma.issue.findUnique({
+    where: { id: parseInt(issueId) }
+  });
+};
+
+const IssueDetailPage = async ({ params }: Props) => {
+  const session = await getServerSession(AuthOptions);
+  
+  // Fetch issue by ID from URL params
+  const issue = await fetchIssue(params.id);
+
+  if (!issue) notFound(); // If no issue found, return 404
+
+  return (
+    <Grid columns={{ initial: '1', sm: '5' }} gap="5">
+      <Box className="md:col-span-4">
+        <IssueDetails issue={issue} />
+      </Box>
+      {session && (
+        <Box>
+          <Flex direction="column" gap="4">
+            <AssigneeSelect issue={issue} />
+            <EditButton id={issue.id} />
+            <DeleteButton id={issue.id} />
+          </Flex>
+        </Box>
+      )}
+    </Grid>
+  );
+};
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const issue = await fetchIssue(params.id);
+
   return {
     title: issue?.title,
     description: 'Details of issue ' + issue?.id
-  }
+  };
 }
 
-export default IssueDetailPage
+export default IssueDetailPage;

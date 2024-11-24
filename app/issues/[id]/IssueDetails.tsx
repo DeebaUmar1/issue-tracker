@@ -4,7 +4,6 @@ import { Heading, Flex, Card, Text } from '@radix-ui/themes'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
-
 const IssueDetails = ({issue} : {issue: Issue}) => {
   return (
     <>
