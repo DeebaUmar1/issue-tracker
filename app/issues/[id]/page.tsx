@@ -8,13 +8,18 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/app/auth/AuthOptions'
 import AssigneeSelect from './AssigneeSelect'
 
-interface Props {
-    params : {id: string}
-}
-const IssueDetailPage = async ({params}: Props) => {
+
+const IssueDetailPage = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ params: string }>;
+  searchParams: Promise<{ [key: string]: string }>;
+} ) => {
     const session = await getServerSession(AuthOptions)
+    const resolvedSearchParams = await searchParams;
     const issue = await prisma.issue.findUnique(
-        {where :{id : parseInt(params.id)}}
+        {where :{id : parseInt(resolvedSearchParams.id)}}
     )
     if(!issue)
         notFound();
@@ -40,8 +45,15 @@ const IssueDetailPage = async ({params}: Props) => {
   )
 }
 
-export async function generateMetadata({ params }: Props) {
-  const issue = await prisma.issue.findUnique({ where: { id: parseInt(params.id) }});
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ params: string }>;
+  searchParams: Promise<{ [key: string]: string }>;
+} ) {
+  const resolvedSearchParams = await searchParams;
+  const issue = await prisma.issue.findUnique({ where: { id: parseInt(resolvedSearchParams.id) }});
   return {
     title: issue?.title,
     description: 'Details of issue ' + issue?.id
