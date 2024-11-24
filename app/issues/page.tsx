@@ -84,6 +84,7 @@ const IssuesPage = async ({
             <Table.Row key={issue.id}>
               <Table.Cell>
               <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 <IssueStatusBadge status={issue.status} />
