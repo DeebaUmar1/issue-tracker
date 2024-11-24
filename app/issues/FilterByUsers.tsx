@@ -6,7 +6,7 @@ import { User } from 'next-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense } from 'react';
 
-const FilterByUsers = () => {
+const FilterByUser = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: users, error, isLoading } = useUsers();
@@ -48,4 +48,12 @@ const useUsers = () =>
     retry: 3,
   });
 
+
+const FilterByUsers = () => {
+  return(
+    <Suspense>
+      <FilterByUser/>
+    </Suspense>
+  )
+}
 export default FilterByUsers;

@@ -1,6 +1,7 @@
 'use client';
 import { Select } from '@radix-ui/themes';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 const statuses: { label: string, value: string }[] = [
   { label: 'All', value: 'ALL' },
@@ -9,7 +10,7 @@ const statuses: { label: string, value: string }[] = [
   { label: 'Closed', value: 'CLOSED' },
 ];
 
-const IssueStatusFilter = () => {
+const IssueStatus = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -36,5 +37,17 @@ const IssueStatusFilter = () => {
     </Select.Root>
   );
 };
+
+
+
+const IssueStatusFilter =  () => {
+  return (
+<Suspense>
+  <IssueStatus/>
+  </Suspense>
+  )
+  
+}
+
 
 export default IssueStatusFilter;

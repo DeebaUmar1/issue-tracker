@@ -2,6 +2,7 @@
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { Flex, Text, Button } from '@radix-ui/themes';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
   itemCount: number;
@@ -9,7 +10,7 @@ interface Props {
   currentPage: number;
 }
 
-const PaginationPage = ({ itemCount, pageSize, currentPage }: Props) => {
+const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageCount = Math.ceil(itemCount / pageSize);
@@ -41,5 +42,14 @@ const PaginationPage = ({ itemCount, pageSize, currentPage }: Props) => {
     </Flex>
   );
 };
+
+const PaginationPage = ({ itemCount, pageSize, currentPage }: Props) =>{
+    return(
+        <Suspense>
+            <Pagination itemCount={itemCount} pageSize={pageSize} currentPage={currentPage}/>
+        </Suspense>
+    )
+}
+
 
 export default PaginationPage;
