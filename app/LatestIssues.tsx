@@ -14,6 +14,7 @@ const LatestIssues = async () => {
     })
   return (
     <Card>
+      console.log(issues)
       <Heading size="4" mb="5">Latest Issues</Heading>
     <Table.Root>
         <Table.Body>
