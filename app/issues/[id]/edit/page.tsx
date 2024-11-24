@@ -3,15 +3,16 @@ import IssueForm from '../../_components/IssueForm'
 import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
 
+interface Props {
+  params: Promise<{ id: string }>;  // Adjusted to match the expected type
+  searchParams: Promise<{ [key: string]: string }>;
+}
 
 const EditIssuePage = async ({
   params,
   searchParams,
-}: {
-  params: Promise<{ params: string }>;
-  searchParams: Promise<{ [key: string]: string }>;
-} ) => {
-  const resolvedSearchParams = await searchParams;
+}: Props) => {
+  const resolvedSearchParams = await params;
     const issue = await prisma.issue.findUnique({
         where : { id: parseInt(resolvedSearchParams.id)}
     })

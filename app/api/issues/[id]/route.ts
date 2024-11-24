@@ -66,12 +66,9 @@ export async function DELETE(
   {
     params,
     searchParams,
-  }: {
-    params: Promise<{ params: string }>;
-    searchParams: Promise<{ [key: string]: string }>;
-  } 
+  }: Props
 ) {
-  const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams = await params;
   const session = await getServerSession(AuthOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
