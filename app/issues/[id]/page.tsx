@@ -9,7 +9,7 @@ import { AuthOptions } from '@/app/auth/AuthOptions'
 import AssigneeSelect from './AssigneeSelect'
 
 interface Props {
-  params: Promise<{ params: string }>;  // Adjusted to match the expected type
+  params: Promise<{ id: string }>;  // Adjusted to match the expected type
   searchParams: Promise<{ [key: string]: string }>;
 }
 
@@ -25,8 +25,9 @@ const IssueDetailPage = async ({ params }: Props) => {
   // Await the params to get the actual value
   const resolvedParams = await params;
   console.log(resolvedParams)
+  console.log(resolvedParams.id)
   // Fetch the issue using the ID from the resolved params
-  const issue = await fetchIssue(resolvedParams.params);
+  const issue = await fetchIssue(resolvedParams.id);
     if(!issue)
         notFound();
   return (
@@ -49,21 +50,5 @@ const IssueDetailPage = async ({ params }: Props) => {
   )
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ params: string }>;
-  searchParams: Promise<{ [key: string]: string }>;
-} ) {
-  const resolvedSearchParams = await searchParams;
-  console.log(resolvedSearchParams.id)
-  console.log(resolvedSearchParams)
-  const issue = await prisma.issue.findUnique({ where: { id: parseInt(resolvedSearchParams.id) }});
-  return {
-    title: issue?.title,
-    description: 'Details of issue ' + issue?.id
-  }
-}
 
 export default IssueDetailPage
