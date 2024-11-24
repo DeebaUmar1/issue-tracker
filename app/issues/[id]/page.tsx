@@ -8,20 +8,25 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/app/auth/AuthOptions'
 import AssigneeSelect from './AssigneeSelect'
 
-const IssueDetailPage = async ({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ params: string }>;
+interface Props {
+  params: Promise<{ params: string }>;  // Adjusted to match the expected type
   searchParams: Promise<{ [key: string]: string }>;
-} ) => {
-    const session = await getServerSession(AuthOptions)
-    const resolvedSearchParams = await searchParams;
-    console.log(resolvedSearchParams.id)
-    console.log(resolvedSearchParams)
-    const issue = await prisma.issue.findUnique(
-        {where :{id : parseInt(resolvedSearchParams.id)}}
-    )
+}
+
+const fetchIssue = async (issueId: string) => {
+  return await prisma.issue.findUnique({
+    where: { id: parseInt(issueId) }
+  });
+};
+
+const IssueDetailPage = async ({ params }: Props) => {
+  const session = await getServerSession(AuthOptions);
+  
+  // Await the params to get the actual value
+  const resolvedParams = await params;
+  console.log(resolvedParams)
+  // Fetch the issue using the ID from the resolved params
+  const issue = await fetchIssue(resolvedParams.params);
     if(!issue)
         notFound();
   return (
@@ -36,8 +41,6 @@ const IssueDetailPage = async ({
        <DeleteButton id = {issue.id}/>
        </Flex> 
        }
-        
-       
       </Box>
       
        
